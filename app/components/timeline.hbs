@@ -1,0 +1,102 @@
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js"></script>
+
+<canvas id= "myChart" widht="100%" height="150"></canvas>
+
+<script>
+    var fecha = new Array(8);
+    var casos = new Array(8);
+    var muertes = new Array(8);
+    var recuperado = new Array(8);
+
+
+    async function getDataGl(){
+        
+        let response3 = await fetch('http://api.coronastatistics.live/timeline');
+        let data3 = await response3.json();
+        let len = data3[0].timeline.length;
+        let cont = 0;
+
+        for(let i = (len - 16); i < len;i++){
+            let cases = 0; let death = 0; let recovered = 0; let date = '';
+            for (let dataTimeline of data3){
+                var prueba = dataTimeline.timeline[i];
+                
+
+                date = (prueba.date).toString();
+                cases += parseInt(prueba.cases);
+                death += parseInt(prueba.deaths);
+                recovered += parseInt(prueba.recovered);
+                
+            }
+            fecha[cont]=date;
+            casos[cont]=cases;
+            muertes[cont]=death;
+            recuperado[cont]=recovered;
+            cont ++;
+            
+        }
+        var config = {
+    type: 'line',
+    data: {
+        labels: fecha,
+        datasets: [{
+            label: 'Cases',
+            data: casos,
+            backgroundColor: [
+                'rgba(255, 255, 255, 0.2)',
+                
+            ],
+            fill: false,
+            borderColor: [
+                'rgba(64, 64, 255, 1)'
+            ],
+            borderWidth: 1
+        },{
+            label: 'Recoveries',
+            data: recuperado,
+            backgroundColor: [
+                'rgba(255, 255, 255, 0.2)',
+                
+            ],
+            fill:false,
+            borderColor: [
+                'rgba(64, 255, 64, 1)',
+            ],
+            borderWidth: 1
+        },{
+            label: 'Deaths',
+            data: muertes,
+            backgroundColor: [
+                'rgba(255, 255, 255, 0.2)',
+                
+            ],
+            fill:false,
+            borderColor: [
+                'rgba(255, 64, 64, 1)',
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
+    }
+};
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, config);
+    }
+
+   getDataGl();
+
+   
+	
+</script>

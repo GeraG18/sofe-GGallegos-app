@@ -1,0 +1,72 @@
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+<div class="form-group pull-right">
+    <input type="text" onkeyup="search(this)" class="search form-control" placeholder="What you looking for?">
+</div>
+
+<table class="table table-striped" id="userTbl">
+    <thead>
+    <tr>
+      <th>Affected countries</th>
+      <th> </th>
+      <th>Today'statistics</th>
+    </tr>
+    </thead>
+    <tbody class = "dbTable" id = "dbTable">  
+    <tr>
+        <td><h5 class="card-title">Card title</h5>
+    <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6></td>
+        <td> </td>
+        <td><h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+        <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6></td>
+    </tr>
+    </tbody>
+</table>
+
+<style>
+thead, tbody { display: block; }
+tbody{
+    height: 200px;
+    overflow-y: scroll;
+}
+</style>
+
+<script>
+    var contenido2 = document.querySelector('tbody.dbTable');
+    async function getAPI(){
+    contenido2.innerHTML = '';
+        let response2 = await fetch('http://api.coronastatistics.live/countries');
+        let data2 = await response2.json();
+        let len =0;
+        for (let country of data2){
+           len++;
+        }
+
+        var todos = '';
+        for(let i = 0; i < len; i++){
+            todos += '<tr><td><h5 class="card-title">'+data2[i].country+
+                '</h5><h6 class="card-subtitle mb-2 text-muted">'+data2[i].cases+' cases & '+data2[i].deaths+' deaths '+
+                    '</h6></td><td> </td><td><h6 class="card-subtitle mb-2 text-muted">'+data2[i].todayCases+' cases'+
+                        '</h6><h6 class="card-subtitle mb-2 text-muted">'+data2[i].todayDeaths+' deaths'+'</h6></td></tr>'; 
+        }
+        contenido2.innerHTML = todos;
+    }//async
+    getAPI();
+    
+    function search(elemento){
+        let searchTerm = elemento.value.toLowerCase();
+        console.log(searchTerm);
+        $('#userTbl tbody tr').each(function(){
+            var lineStr = $(this).text().toLowerCase();
+            if(lineStr.indexOf(searchTerm) === -1){
+                $(this).hide();
+            }else{
+                $(this).show();
+            }
+        });
+    }
+
+</script>

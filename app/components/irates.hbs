@@ -1,0 +1,55 @@
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+
+<div class="container-fluid position-relative">
+  <div class = "topBoxes">
+     <div class="row" id="row4"></div>
+  </div>
+</div>
+
+<script>
+    var cont = document.querySelector('#row4');
+    async function getData(){ 
+        cont.innerHTML = ''
+        let response = await fetch('http://api.coronastatistics.live/all');
+        let data = await response.json();
+
+        let response2 = await fetch('http://api.coronastatistics.live/countries');
+        let data2 = await response2.json();
+        let len =0;
+        for (let country of data2){
+           len++;
+        }
+
+        let casesToday = 0;
+        let deathsToday = 0;
+        let critical = 0;
+        let recovered = 0;
+        let cPerOneM = 0;
+        for(let i = 0; i < len; i++){
+          
+          casesToday += parseInt(data2[i].todayCases);
+          deathsToday+= parseInt(data2[i].todayDeaths);
+          critical += parseInt(data2[i].critical);
+          recovered += parseInt(data2[i].recovered);
+          cPerOneM += parseInt(data2[i].casesPerOneMillion);
+          
+        }
+        activeCases = data.cases+critical;
+        closedCases = data.recovered+data.deaths;
+        //console.log(casesToday+ " "+ deathsToday+" "+critical+" "+recovered+" "+cPerOneM);
+        pInfect = (data.cases/activeCases)*100;
+        pCrit = (critical/activeCases)*100;
+
+        pRecov = (data.recovered/closedCases)*100;
+        pDea = (data.deaths/closedCases)*100;
+        cont.innerHTML = '<div class="col-sm"><div class="alert alert-secondary lead" role="alert">'+pInfect+'<h6 class="card-subtitle mb-2 text-muted"> infected rate</h6>'+'</div></div>'+
+          '<div class="col-sm"><div class="alert alert-secondary lead" role="alert">'+pDea+'<h6 class="card-subtitle mb-2 text-muted"> deaths rate</h6>'+'</div></div>'+
+          '<div class="col-sm"><div class="alert alert-secondary lead" role="alert">'+pRecov+'<h6 class="card-subtitle mb-2 text-muted"> recovery rate</h6>'+'</div></div>'+
+          '<div class="col-sm"><div class="alert alert-secondary lead" role="alert">'+len+'<h6 class="card-subtitle mb-2 text-muted"> nations affected</h6>'+'</div></div>';
+    }
+    getData();
+</script>
