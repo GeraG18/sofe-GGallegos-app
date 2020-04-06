@@ -13,26 +13,40 @@ You will need the following things properly installed on your computer.
 * [Visual Studio Code](https://code.visualstudio.com)
 ## Installation
 
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install foobar.
+1. Download the project from the [GIT repository](https://github.com/GeraG18/sofe-GGallegos-app) 
 
-```bash
-pip install foobar
+2. Unzip the project, for example on the desktop folder
+
+3. Open the folder with [Visual Studio Code](https://code.visualstudio.com)
+
+4. In [Visual Studio Code](https://code.visualstudio.com) open the terminal (you can found in the upper menu)
+
+5. Next in the terminal write
 ```
+cd ../project_route/sofe-GGallegos-app-master
+```
+6. Install [Ember CLI](https://ember-cli.com/)  using the next command
+```
+npm install -g ember-cli
+```
+7. When [Ember CLI](https://ember-cli.com/)  finishes to install,put one of the next commands into the terminal
+```
+ember serve
+npm start
+
+```
+8. And it's ready to use, enjoy it! ;)
 
 ## Usage
 
-```python
-import foobar
-
-foobar.pluralize('word') # returns 'words'
-foobar.pluralize('goose') # returns 'geese'
-foobar.singularize('phenomena') # returns 'phenomenon'
+In the project's directory
 ```
+../app/components/
+```
+You can found every component like you see into the website, you're allowed to modify only for you
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-Please make sure to update tests as appropriate.
 
 ## License
 MIT License
